@@ -43,10 +43,14 @@ public final class GroupNameExtractorDecorator extends GroupExtractorDecorator {
     if (unversionedGroupName != null) {
       return unversionedGroupName;
     } else {
-      return requestedGroupName;
+      return stripHashCode(requestedGroupName);
     }
   }
 
+  private String stripHashCode(String requestedGroupName) {
+    return requestedGroupName.replaceFirst("(-.{40}$)", "");
+  }
+  
   private String getGroupNameFromCache(final String publicName, final ResourceType type) {
     final TaglibCacheKey cacheKey = new TaglibCacheKey(publicName, type);
     final GroupNameCache nameCache = groupNameCacheInitializer.get();
