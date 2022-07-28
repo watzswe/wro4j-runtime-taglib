@@ -43,12 +43,18 @@ public final class GroupNameExtractorDecorator extends GroupExtractorDecorator {
     if (unversionedGroupName != null) {
       return unversionedGroupName;
     } else {
-      return stripHashCode(requestedGroupName);
+      return stripGroupName(requestedGroupName, request);
     }
   }
 
-  private String stripHashCode(String requestedGroupName) {
-    return requestedGroupName.replaceFirst("(-.{40}$)", "");
+  private String stripGroupName(final String requestedGroupName, final HttpServletRequest request) {
+    final ConfigurationHelper configurationHelper = new ConfigurationHelper(request.getServletContext());
+    // Strip Groupname if Cache is empty. Example SHA-1 Hash Regex (-.{40}$)
+    final String stripGroupNameRegEx = configurationHelper.getProperty("stripGroupNameRegEx");
+    if (StringUtils.isNotEmpty(stripGroupNameRegEx)) {
+      return requestedGroupName.replaceFirst(stripGroupNameRegEx, "");
+    }
+    return requestedGroupName;
   }
   
   private String getGroupNameFromCache(final String publicName, final ResourceType type) {
