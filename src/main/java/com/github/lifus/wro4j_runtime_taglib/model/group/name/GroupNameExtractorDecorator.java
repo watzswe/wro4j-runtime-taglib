@@ -6,6 +6,8 @@ package com.github.lifus.wro4j_runtime_taglib.model.group.name;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.github.lifus.wro4j_runtime_taglib.config.ConfigurationHelper;
+import org.apache.commons.lang3.StringUtils;
 import ro.isdc.wro.model.group.GroupExtractor;
 import ro.isdc.wro.model.group.processor.GroupExtractorDecorator;
 import ro.isdc.wro.model.resource.ResourceType;
@@ -56,7 +58,7 @@ public final class GroupNameExtractorDecorator extends GroupExtractorDecorator {
     }
     return requestedGroupName;
   }
-  
+
   private String getGroupNameFromCache(final String publicName, final ResourceType type) {
     final TaglibCacheKey cacheKey = new TaglibCacheKey(publicName, type);
     final GroupNameCache nameCache = groupNameCacheInitializer.get();
